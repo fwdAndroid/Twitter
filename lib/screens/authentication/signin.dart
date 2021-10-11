@@ -111,7 +111,7 @@ class _SignInState extends State<SignIn> {
               icon: Icon(Icons.app_registration, size: 18),
               // ignore: prefer_const_constructors
               label: Text(
-                "Sign UP",
+                "Sign IN",
                 style: const TextStyle(color: Colors.white),
               ),
             ),
