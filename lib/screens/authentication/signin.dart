@@ -1,34 +1,34 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:twitter/authentication/signin.dart';
-import 'package:twitter/authfiresbase/auth.dart';
+import 'package:twitter/screens/authentication/signup.dart';
+import 'package:twitter/screens/main/home.dart';
+import 'package:twitter/services/authfiresbase/auth.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class SignIn extends StatefulWidget {
+  const SignIn({Key? key}) : super(key: key);
 
   @override
-  _SignUpState createState() => _SignUpState();
+  _SignInState createState() => _SignInState();
 }
 
-class _SignUpState extends State<SignUp> {
-  final formKey = GlobalKey<FormState>();
+class _SignInState extends State<SignIn> {
   final auth = FirebaseAuth.instance;
-  FirebaseAuthentication firebaseAuthentication = FirebaseAuthentication();
+  final formKey = GlobalKey<FormState>();
+
   String email = "";
   String password = "";
   var url =
       "https://www.lter-europe.net/document-archive/image-gallery/albums/logos/TwitterLogo_55acee.png/image";
+  FirebaseAuthentication firebaseAuthentication = FirebaseAuthentication();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blue[300],
+        // ignore: prefer_const_constructors
         title: Text(
-          'SignUp',
+          'Sign In',
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -46,7 +46,8 @@ class _SignUpState extends State<SignUp> {
             ),
             //Email
             Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+              margin: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 15, right: 15),
               child: TextFormField(
                 validator: (val) => val!.isEmpty ? "Enter An Email" : null,
                 onChanged: (val) {
@@ -59,7 +60,7 @@ class _SignUpState extends State<SignUp> {
                     // fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
-                      borderSide: BorderSide(),
+                      borderSide: const BorderSide(),
                     ),
                     fillColor: Colors.green),
                 keyboardType: TextInputType.emailAddress,
@@ -67,7 +68,8 @@ class _SignUpState extends State<SignUp> {
             ),
             //Password
             Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+              margin: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 15, right: 15),
               child: TextFormField(
                 validator: (val) => val!.length < 5
                     ? "Password length must be greater than 5 characters"
@@ -83,7 +85,7 @@ class _SignUpState extends State<SignUp> {
                     // fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
-                      borderSide: BorderSide(),
+                      borderSide: const BorderSide(),
                     ),
                     fillColor: Colors.green),
                 keyboardType: TextInputType.visiblePassword,
@@ -93,22 +95,27 @@ class _SignUpState extends State<SignUp> {
             ElevatedButton.icon(
               onPressed: () async {
                 // Respond to button press
-                await firebaseAuthentication.signUpTwitter(email, password);
+                await firebaseAuthentication.signInTwitter(email, password);
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (ctx) => Home()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
                 primary: Colors.blue[300],
                 padding:
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
               ),
+              // ignore: prefer_const_constructors
               icon: Icon(Icons.app_registration, size: 18),
+              // ignore: prefer_const_constructors
               label: Text(
                 "Sign UP",
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
+            // ignore: prefer_const_constructors
             SizedBox(
               height: 20,
             ),
@@ -116,16 +123,17 @@ class _SignUpState extends State<SignUp> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SignIn()),
+                    MaterialPageRoute(builder: (context) => SignUp()),
                   );
                 },
                 child: Text(
-                  'Already Register',
+                  'Create Account ! If you are not registered',
                   style: TextStyle(color: Colors.blue[300]),
                 ))
           ],
         ),
       ),
     );
+    ;
   }
 }
