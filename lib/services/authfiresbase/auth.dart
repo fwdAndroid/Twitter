@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:twitter/models/usermodel.dart';
 
@@ -7,10 +8,21 @@ class FirebaseAuthentication {
   //Register
   Future<void> signUpTwitter(String email, String password) async {
     try {
-      User user = (await auth.createUserWithEmailAndPassword(
-          email: email, password: password)) as User;
+      // ignore: unnecessary_cast
+      UserCredential user = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
 
-      _userFromFirebaseUser(user);
+      //Add User To DataBase
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.user!.uid)
+          .set({
+        'name': email,
+        'email': email,
+      });
+      //End Adding User To Firebase
+
+      _userFromFirebaseUser(user.user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
