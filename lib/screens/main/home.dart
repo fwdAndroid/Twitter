@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter/screens/authentication/signin.dart';
+import 'package:twitter/screens/posts/listpost.dart';
 import 'package:twitter/services/authfiresbase/auth.dart';
+import 'package:twitter/widgets/drawer.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -43,6 +45,8 @@ class Home extends StatelessWidget {
           color: Colors.white,
         ),
       ),
+      drawer: MyDrawer(),
+      body: ListPost(),
     );
   }
 }
