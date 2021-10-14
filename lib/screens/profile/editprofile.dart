@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:twitter/services/saveuser/user.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  UserService userService = UserService();
   String name = "";
   File? profileImage;
   File? bannerImage;
@@ -42,8 +44,14 @@ class _EditProfileState extends State<EditProfile> {
         automaticallyImplyLeading: true,
         actions: [
           TextButton(
-            onPressed: () => {},
+            onPressed: () async {
+              await userService.updateProfile(
+                  bannerImage!, profileImage!, name);
+              Navigator.pop(context);
+            },
+            // ignore: prefer_const_constructors
             child: Text('Save',
+                // ignore: prefer_const_constructors
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
