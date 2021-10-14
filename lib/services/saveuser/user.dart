@@ -20,7 +20,8 @@ class UserService {
     }
     if (_profileImage != null) {
       //Save Image to Storage
-      _profileImageUrl = await utilsService.uploadFile(_profileImage, 'path');
+      _profileImageUrl = await utilsService.uploadFile(_profileImage,
+          'user/profile/${FirebaseAuth.instance.currentUser!.uid}/profile');
     }
 
     Map<String, Object> data = new HashMap();
