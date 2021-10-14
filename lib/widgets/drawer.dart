@@ -22,6 +22,12 @@ class MyDrawer extends StatelessWidget {
             Navigator.pushNamed(context, '/profile');
           },
         ),
+        ListTile(
+          title: Text('Edit Profile'),
+          onTap: () {
+            Navigator.pushNamed(context, '/edit');
+          },
+        ),
         const Divider(color: Colors.black),
         ListTile(
           title: Text('SignOut'),

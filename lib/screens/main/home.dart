@@ -46,7 +46,6 @@ class Home extends StatelessWidget {
         ),
       ),
       drawer: MyDrawer(),
-      body: ListPost(),
     );
   }
 }

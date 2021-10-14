@@ -6,6 +6,7 @@ import 'package:twitter/models/usermodel.dart';
 import 'package:twitter/screens/authentication/signin.dart';
 import 'package:twitter/screens/main/home.dart';
 import 'package:twitter/screens/posts/addpost.dart';
+import 'package:twitter/screens/profile/editprofile.dart';
 import 'package:twitter/screens/profile/profile.dart';
 
 class Wrapper extends StatelessWidget {
@@ -13,7 +14,7 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel>(context);
+    final user = Provider.of<UserModel?>(context);
     // ignore: unnecessary_null_comparison
     if (user == null) {
       return SignIn();
@@ -23,7 +24,8 @@ class Wrapper extends StatelessWidget {
         routes: {
           '/': (context) => Home(),
           '/add': (context) => AddPost(),
-          '/profile': (context) => Profile()
+          '/profile': (context) => Profile(),
+          '/edit': (context) => EditProfile()
         },
       );
     }
