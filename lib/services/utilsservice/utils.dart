@@ -11,11 +11,24 @@ class UtilsService {
         ? UserModel(
             id: documentSnapshot.id,
             name: documentSnapshot.get('name'),
-            profileImageURL: documentSnapshot.get('profileImageURL'),
-            bannerImageURL: documentSnapshot.get('bannerImageURL'),
-            email: documentSnapshot.get('email'),
+            profileImageURL: documentSnapshot.get('profileImageURL') ?? '',
+            bannerImageURL: documentSnapshot.get('bannerImageURL') ?? '',
+            email: documentSnapshot.get('email') ?? '',
           )
         : null;
+  }
+
+  List<UserModel?> userListFromQuerySnapshot(
+      QuerySnapshot<Map<String, dynamic>> event) {
+    return event.docs.map((doc) {
+      return UserModel(
+        id: doc.id,
+        name: doc.get('name'),
+        profileImageURL: doc.get('profileImageURL') ?? '',
+        bannerImageURL: doc.get('bannerImageURL') ?? '',
+        email: doc.get('email') ?? '',
+      );
+    }).toList();
   }
 
   //Get User Information
@@ -25,6 +38,18 @@ class UtilsService {
         .doc(uid)
         .snapshots()
         .map(userFirebasesSnapshote);
+  }
+
+  //Search User
+  Stream<List<UserModel?>> queryByName(search) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .orderBy("name")
+        .startAt([search])
+        .endAt([search + '\uf8ff'])
+        .limit(10)
+        .snapshots()
+        .map(userListFromQuerySnapshot);
   }
 
   //upload image in firsbase storage

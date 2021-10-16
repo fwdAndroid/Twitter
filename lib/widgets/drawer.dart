@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter/services/authfiresbase/auth.dart';
 
@@ -19,7 +20,8 @@ class MyDrawer extends StatelessWidget {
         ListTile(
           title: Text('Profile'),
           onTap: () {
-            Navigator.pushNamed(context, '/profile');
+            Navigator.pushNamed(context, '/profile',
+                arguments: FirebaseAuth.instance.currentUser!.uid);
           },
         ),
         ListTile(

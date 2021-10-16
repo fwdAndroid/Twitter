@@ -14,18 +14,17 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     PostService postService = PostService();
     UserService userService = UserService();
+
+    var uid = ModalRoute.of(context)!.settings.arguments;
     return MultiProvider(
       // ignore: prefer_const_literals_to_create_immutables
       providers: [
         StreamProvider.value(
           initialData: null,
-          value: postService
-              .getPostsByUser(FirebaseAuth.instance.currentUser!.uid),
+          value: postService.getPostsByUser(uid),
         ),
         StreamProvider.value(
-            initialData: null,
-            value: userService.utilsService
-                .getUserInfo(FirebaseAuth.instance.currentUser!.uid))
+            initialData: null, value: userService.utilsService.getUserInfo(uid))
       ],
       child: Scaffold(
           body: DefaultTabController(
@@ -53,12 +52,19 @@ class Profile extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Image.network(
-                              Provider.of<UserModel>(context).profileImageURL ??
-                                  '',
-                              fit: BoxFit.cover,
-                              height: 60,
-                            ),
+                            Provider.of<UserModel>(context).profileImageURL !=
+                                    null
+                                ? CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: NetworkImage(
+                                        Provider.of<UserModel>(context)
+                                            .profileImageURL
+                                            .toString()),
+                                  )
+                                : Icon(
+                                    Icons.person,
+                                    size: 50,
+                                  ),
                             TextButton(
                               onPressed: () {
                                 Navigator.pushNamed(context, '/edit');
@@ -68,12 +74,12 @@ class Profile extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: EdgeInsets.symmetric(vertical: 10),
                                 child: Text(
                                   Provider.of<UserModel>(context).name ?? '',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25),
                                 ),
                               ),
                             )

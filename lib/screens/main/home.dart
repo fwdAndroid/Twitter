@@ -1,18 +1,26 @@
+// ignore_for_file: prefer_const_constructors, duplicate_ignore
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter/screens/authentication/signin.dart';
-import 'package:twitter/screens/posts/listpost.dart';
 import 'package:twitter/services/authfiresbase/auth.dart';
+import 'package:twitter/widgets/bottomnavigationwidget.dart';
 import 'package:twitter/widgets/drawer.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuthentication firebaseAuthentication = FirebaseAuthentication();
 
     return Scaffold(
+      // ignore: duplicate_ignore
       appBar: AppBar(
         backgroundColor: Colors.blue[300],
         // ignore: prefer_const_constructors
@@ -46,6 +54,7 @@ class Home extends StatelessWidget {
         ),
       ),
       drawer: MyDrawer(),
+      bottomNavigationBar: BottomNavigationWidget(),
     );
   }
 }

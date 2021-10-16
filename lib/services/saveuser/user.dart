@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:collection';
 import 'dart:io';
 
@@ -24,7 +26,7 @@ class UserService {
           'user/profile/${FirebaseAuth.instance.currentUser!.uid}/profile');
     }
 
-    Map<String, Object> data = new HashMap();
+    Map<String, Object> data = HashMap();
     if (name != '') data['name'] = name;
     if (_bannerImageUrl != '') data['_bannerImageUrl'] = _bannerImageUrl;
     if (_profileImageUrl != '') data['_profileImageUrl'] = _profileImageUrl;
