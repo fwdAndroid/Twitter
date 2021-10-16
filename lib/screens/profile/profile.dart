@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:twitter/models/usermodel.dart';
 import 'package:twitter/screens/posts/listpost.dart';
 import 'package:twitter/services/postservices/postservice.dart';
-import 'package:twitter/services/saveuser/user.dart';
+import 'package:twitter/services/utilsservice/utils.dart';
 
 //Multiprovider is used when multiples servicess are used in one class
 class Profile extends StatelessWidget {
@@ -13,7 +13,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PostService postService = PostService();
-    UserService userService = UserService();
+    UtilsService utilsService = UtilsService();
 
     var uid = ModalRoute.of(context)!.settings.arguments;
     return MultiProvider(
@@ -24,7 +24,14 @@ class Profile extends StatelessWidget {
           value: postService.getPostsByUser(uid),
         ),
         StreamProvider.value(
-            initialData: null, value: userService.utilsService.getUserInfo(uid))
+          initialData: null,
+          value: utilsService.getUserInfo(uid),
+        ),
+        StreamProvider.value(
+          initialData: null,
+          value: utilsService.isFollowing(
+              FirebaseAuth.instance.currentUser!.uid, uid),
+        ),
       ],
       child: Scaffold(
           body: DefaultTabController(
@@ -46,14 +53,15 @@ class Profile extends StatelessWidget {
                 SliverList(
                     delegate: SliverChildListDelegate([
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Provider.of<UserModel>(context).profileImageURL !=
-                                    null
+                                    ''
                                 ? CircleAvatar(
                                     radius: 30,
                                     backgroundImage: NetworkImage(
@@ -61,29 +69,46 @@ class Profile extends StatelessWidget {
                                             .profileImageURL
                                             .toString()),
                                   )
-                                : Icon(
+                                : const Icon(
                                     Icons.person,
                                     size: 50,
                                   ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/edit');
-                              },
-                              child: Text('Edit Profile'),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 10),
-                                child: Text(
-                                  Provider.of<UserModel>(context).name ?? '',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25),
-                                ),
-                              ),
-                            )
+                            if (FirebaseAuth.instance.currentUser!.uid == uid)
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/edit');
+                                },
+                                child: const Text('Edit Profile'),
+                              )
+                            else if (FirebaseAuth.instance.currentUser!.uid !=
+                                    uid &&
+                                !Provider.of<bool>(context))
+                              TextButton(
+                                  onPressed: () {
+                                    utilsService.followUser(uid);
+                                  },
+                                  child: const Text("Follow"))
+                            else if (FirebaseAuth.instance.currentUser!.uid !=
+                                    uid &&
+                                Provider.of<bool>(context))
+                              TextButton(
+                                  onPressed: () {
+                                    utilsService.unfollowUser(uid);
+                                  },
+                                  child: const Text("Unfollow")),
                           ],
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              Provider.of<UserModel>(context).name ?? '',
+                              // ignore: prefer_const_constructors
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
+                          ),
                         )
                       ],
                     ),
