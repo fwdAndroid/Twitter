@@ -16,6 +16,42 @@ class PostService {
     });
   }
 
+  //Like Post
+  Future likePost(PostModel post, bool current) async {
+    print(post.id);
+    if (current) {
+      post.likesCount = (post.likesCount - 1);
+      await FirebaseFirestore.instance
+          .collection("posts")
+          .doc(post.id)
+          .collection("likes")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .delete();
+    }
+    if (!current) {
+      post.likesCount = post.likesCount + 1;
+      await FirebaseFirestore.instance
+          .collection("posts")
+          .doc(post.id)
+          .collection("likes")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set({});
+    }
+  }
+
+  //Like Get Userr Like
+  Stream<bool> getCurrentUserLike(PostModel post) {
+    return FirebaseFirestore.instance
+        .collection("posts")
+        .doc(post.id)
+        .collection("likes")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.exists;
+    });
+  }
+
   //To Create Information in form of list and store inside the map of above getPostsByUser fuuction we create the list of postmodal
   List<PostModel> _postListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
@@ -24,6 +60,8 @@ class PostService {
         creator: doc.get('creator') ?? '',
         text: doc.get('text') ?? '',
         timestamp: doc.get('timestamp') ?? 0,
+        likesCount: doc.get('likesCount') ?? 0,
+        retweetsCount: doc.get('retweetsCount') ?? 0,
       );
     }).toList();
   }

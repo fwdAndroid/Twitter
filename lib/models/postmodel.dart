@@ -5,9 +5,13 @@ class PostModel {
   final String creator;
   final String text;
   final Timestamp timestamp;
+  int likesCount;
+  int retweetsCount;
   PostModel(
       {required this.id,
       required this.creator,
       required this.text,
-      required this.timestamp});
+      required this.timestamp,
+      required this.likesCount,
+      required this.retweetsCount});
 }
