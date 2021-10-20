@@ -20,7 +20,7 @@ class UtilsService {
         : null;
   }
 
-  List<UserModel?> userListFromQuerySnapshot(
+  List<UserModel> userListFromQuerySnapshot(
       QuerySnapshot<Map<String, dynamic>> event) {
     return event.docs.map((doc) {
       return UserModel(
@@ -56,7 +56,7 @@ class UtilsService {
   }
 
   //Search User
-  Stream<List<UserModel?>> queryByName(search) {
+  Stream<List<UserModel>> queryByName(search) {
     return FirebaseFirestore.instance
         .collection('users')
         .orderBy("name")

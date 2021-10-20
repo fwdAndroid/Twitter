@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:twitter/models/postmodel.dart';
 import 'package:twitter/models/usermodel.dart';
 import 'package:twitter/screens/posts/listpost.dart';
 import 'package:twitter/services/postservices/postservice.dart';
@@ -8,7 +9,7 @@ import 'package:twitter/services/utilsservice/utils.dart';
 
 //Multiprovider is used when multiples servicess are used in one class
 class Profile extends StatelessWidget {
-  const Profile({Key? key}) : super(key: key);
+  Profile({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +117,7 @@ class Profile extends StatelessWidget {
                 ]))
               ];
             },
-            body: ListPost()),
+            body: ListPost(null!)),
       )),
     );
   }
